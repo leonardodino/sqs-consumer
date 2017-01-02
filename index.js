@@ -52,6 +52,7 @@ function isAuthenticationError(err) {
 function Consumer(options) {
   validate(options);
 
+  this.custom = options.custom;
   this.queueUrl = options.queueUrl;
   this.handleMessage = options.handleMessage;
   this.attributeNames = options.attributeNames || [];
@@ -148,6 +149,9 @@ Consumer.prototype._processMessage = function (message, cb) {
   var consumer = this;
 
   this.emit('message_received', message);
+  if(this.custom){
+    return consumer.handleMessage(message, cb);
+  }
   async.series([
     function handleMessage(done) {
       consumer.handleMessage(message, done);
