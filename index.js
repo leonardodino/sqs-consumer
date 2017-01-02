@@ -150,7 +150,7 @@ Consumer.prototype._processMessage = function (message, cb) {
 
   this.emit('message_received', message);
   if(this.custom){
-    return consumer.handleMessage(message, cb);
+    return consumer.handleMessage(Object.assign({}, message, {QueueUrl: this.QueueUrl}), cb);
   }
   async.series([
     function handleMessage(done) {
